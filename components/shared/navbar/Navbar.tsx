@@ -3,6 +3,7 @@ import React from 'react'
 import Image from 'next/image' // Import the Image component from the correct package
 import { SignedIn, UserButton } from '@clerk/nextjs'
 import Theme from './Theme'
+import MobileNav from './MobileNav'
 
 const navbar = () => {
   return (
@@ -14,7 +15,7 @@ const navbar = () => {
           height={23}
           alt="Devflow"
         />
-        <p className="h2-bold font-spaceGrotesk">
+        <p className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
           Dev <span className="text-primary-500">Overflow</span>
         </p>
       </Link>
@@ -33,6 +34,7 @@ const navbar = () => {
             }}
           />
         </SignedIn>
+        <MobileNav />
       </div>
     </nav>
   )

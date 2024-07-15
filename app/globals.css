@@ -147,6 +147,37 @@ code {
   background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%) !important;
 }
 
+/* Clerk custom styles */
+/* Clerk custom styles */
+.cl-internal-4axjga {
+  transition-property: background-color, background, border-color, color, fill,
+    stroke, opacity, box-shadow, transform;
+  transition-timing-function: ease;
+  transition-duration: 200ms;
+}
+
+.cl-internal-4axjga:focus {
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 0 4px rgba(255, 112, 0, 0.75); /* Initial orange focus ring */
+  transition-property: background-color, background, border-color, color, fill,
+    stroke, opacity, box-shadow, transform;
+  transition-timing-function: ease;
+  transition-duration: 200ms;
+}
+
+.cl-internal-4axjga:focus {
+  animation: easeToLighterColor 1s forwards;
+}
+
+@keyframes easeToLighterColor {
+  0% {
+    box-shadow: 0 0 0 4px rgba(255, 112, 0, 0.75);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(255, 179, 128, 0.75); /* Lighter shade */
+  }
+}
+
 .hash-span {
   margin-top: -140px;
   padding-bottom: 140px;

@@ -46,10 +46,7 @@ export default function RootLayout({
             },
           }}
         >
-          <ThemeProvider>
-            {/* <Header /> */}
-            {children}
-          </ThemeProvider>
+          <ThemeProvider>{children}</ThemeProvider>
         </ClerkProvider>
       </body>
     </html>
