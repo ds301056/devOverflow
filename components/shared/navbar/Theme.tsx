@@ -1,14 +1,12 @@
 'use client' // this is a client side file
 import { useTheme } from '@/context/ThemeProvider'
-import React, { constructor } from 'react'
+import React from 'react'
 
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
   MenubarTrigger,
 } from '@/components/ui/menubar'
 import Image from 'next/image'
