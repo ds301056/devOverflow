@@ -1,10 +1,4 @@
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  // SignInButton,
-  UserButton,
-} from '@clerk/nextjs' // import the ClerkProvider, SignedIn, SignedOut, SignInButton, and UserButton components from the Clerk SDK
+import { ClerkProvider } from '@clerk/nextjs' // import the ClerkProvider, SignedIn, SignedOut, SignInButton, and UserButton components from the Clerk SDK
 import React from 'react'
 import { Inter, Space_Grotesk } from 'next/font/google' // import the Inter and Space_Grotesk fonts from the Google Fonts API
 import type { Metadata } from 'next' // import the Metadata type from the next package
@@ -35,24 +29,6 @@ export const metadata: Metadata = {
   },
 }
 
-// create a new Header component
-function Header() {
-  return (
-    <header
-      style={{ display: 'flex', justifyContent: 'space-between', padding: 20 }}
-    >
-      <SignedIn>
-        {/* Mount the UserButton component */}
-        {/* <UserButton /> */}
-        <UserButton />
-      </SignedIn>
-      <SignedOut>
-        {/* Mount the SignInButton component */}
-        {/* <SignInButton /> */}
-      </SignedOut>
-    </header>
-  )
-}
 // by wrapping the children in the ClerkProvider component, we can access the user session in any child component and style every page with the ThemeProvider component
 export default function RootLayout({
   children,
@@ -71,8 +47,7 @@ export default function RootLayout({
           }}
         >
           <ThemeProvider>
-            <h1 className="h1-bold">This is a piece of text.</h1>
-            <Header />
+            {/* <Header /> */}
             {children}
           </ThemeProvider>
         </ClerkProvider>

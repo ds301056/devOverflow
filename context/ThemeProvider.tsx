@@ -22,8 +22,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (mode === 'dark') {
       setMode('light')
       document.documentElement.classList.add('light')
-    }
-    if (mode === 'light') {
+    } else {
       setMode('dark')
       document.documentElement.classList.add('dark')
     }
@@ -49,4 +48,6 @@ export function useTheme() {
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }
+
+  return context
 }
