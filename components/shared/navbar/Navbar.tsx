@@ -4,6 +4,7 @@ import Image from 'next/image' // Import the Image component from the correct pa
 import { SignedIn, UserButton } from '@clerk/nextjs'
 import Theme from './Theme'
 import MobileNav from './MobileNav'
+import GlobalSearch from '../search/GlobalSearch'
 
 const navbar = () => {
   return (
@@ -19,7 +20,9 @@ const navbar = () => {
           Dev <span className="text-primary-500">Overflow</span>
         </p>
       </Link>
-      {/* Global Search */}
+
+      <GlobalSearch />
+
       <div className="flex-between gap-5">
         <Theme />
         <SignedIn>
