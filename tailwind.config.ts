@@ -53,6 +53,11 @@ module.exports = {
       backgroundImage: {
         'auth-dark': "url('/assets/images/auth-dark.png')",
         'auth-light': "url('/assets/images/auth-light.png')",
+        'shimmer-gradient-light': 'linear-gradient(130deg, #ff7e5f, #feb47b)',
+        'shimmer-gradient-dark': 'linear-gradient(130deg, #8B4513, #A0522D)', // Deep dark orange gradient
+      },
+      backgroundSize: {
+        '200-percent': '200% 200%',
       },
       screens: {
         xs: '420px',
@@ -66,10 +71,15 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '100% 50%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        shimmer: 'shimmer 1s ease-in-out infinite',
       },
     },
   },
