@@ -1,9 +1,39 @@
 import HomeFilters from '@/components/home/HomeFilters'
 import Filter from '@/components/shared/Filter'
+import NoResult from '@/components/shared/NoResult'
 import LocalSearchbar from '@/components/shared/search/LocalSearchbar'
 import { Button } from '@/components/ui/button'
 import { HomePageFilters } from '@/constants/filters'
 import Link from 'next/link'
+
+const questions = [
+  /*   {
+    _id: 1,
+    tittle: 'Cascading Deletes in SQLAlchemy?',
+    tags: [
+      { _id: 1, name: 'python' },
+      { _id: 2, name: 'sql' },
+    ],
+    author: 'John Doe',
+    upvotes: 10,
+    views: 20,
+    answers: 2,
+    createdAt: '2024-06-14T09:00:00.000Z',
+  },
+  {
+    _id: 2,
+    tittle: 'How to use React Router?',
+    tags: [
+      { _id: 1, name: 'react' },
+      { _id: 2, name: 'router' },
+    ],
+    author: 'Jane Doe',
+    upvotes: 10,
+    views: 20,
+    answers: 2,
+    createdAt: '2024-07-17T09:00:00.000Z',
+  }, */
+]
 
 export default function Home() {
   return (
@@ -35,6 +65,14 @@ export default function Home() {
       </div>
 
       <HomeFilters />
+
+      <div className="mt-10 flex w-full flex-col">
+        {questions.length > 0 ? (
+          questions.map((question) => 'QuestionCard')
+        ) : (
+          <NoResult />
+        )}
+      </div>
     </>
   )
 }
