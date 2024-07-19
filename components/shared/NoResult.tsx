@@ -3,7 +3,13 @@ import React from 'react'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 
-const NoResult = () => {
+interface Props {
+  title: string
+  description: string
+  link: string
+  linkTitle: string
+}
+const NoResult = ({ title, description, link, linkTitle }: Props) => {
   return (
     <div className="mt-10 flex w-full flex-col items-center justify-center">
       <Image
@@ -21,16 +27,15 @@ const NoResult = () => {
         className="hidden object-contain dark:flex"
       />
 
-      <h2 className="h2-bold text-dark200_light900 mt-8">
-        There&rsquo;s no questions to show.
-      </h2>
+      <h2 className="h2-bold text-dark200_light900 mt-8">{title}</h2>
       <p className="body-regular text-dark500_light700 my-3.5 max-w-md text-center">
-        Be the first to ask! 🚀 Ask a question and kickstart the discussion. Our
-        query could be the next big thing others learn from. Get involved! 💡
+        {description}
       </p>
 
-      <Link href="">
-        <Button>Ask a Question</Button>
+      <Link href={link}>
+        <Button className="paragraph-medium mt-5 min-h-[46px] rounded-lg bg-primary-500 text-light-900 hover:animate-shimmer hover:bg-[200-percent] hover:bg-orange-600 hover:bg-shimmer-gradient-light hover:shadow-lg dark:bg-primary-500 dark:text-light-900 dark:hover:animate-shimmer dark:hover:bg-[200-percent] dark:hover:bg-shimmer-gradient-dark">
+          {linkTitle}
+        </Button>
       </Link>
     </div>
   )

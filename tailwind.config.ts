@@ -27,6 +27,7 @@ module.exports = {
           300: '#151821',
           400: '#212734',
           500: '#101012',
+          600: '#0D0D0D', // Slightly darker highlight for hover
         },
         light: {
           900: '#FFFFFF',
@@ -37,6 +38,8 @@ module.exports = {
           400: '#858EAD',
         },
         'accent-blue': '#1DA1F2',
+        'custom-light-hover': 'rgba(244, 246, 248, 1)', // Custom light hover color
+        'custom-dark-hover': 'rgba(13, 13, 13, 1)', // Custom dark hover color updated to match dark-600
       },
       fontFamily: {
         inter: ['var(--font-inter)'],
@@ -80,6 +83,9 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         shimmer: 'shimmer 1s ease-in-out infinite',
+      },
+      textColor: {
+        'dark-400_light700': 'text-dark-400 dark:text-light-700',
       },
     },
   },

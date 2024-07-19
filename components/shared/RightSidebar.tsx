@@ -13,11 +13,11 @@ const hotQuestions = [
 ]
 
 const popularTags = [
-  { _id: 1, name: 'React', totalQuestions: 5 },
-  { _id: 2, name: 'Next.js', totalQuestions: 8 },
-  { _id: 3, name: 'JavaScript', totalQuestions: 5 },
-  { _id: 4, name: 'TypeScript', totalQuestions: 6 },
-  { _id: 5, name: 'Node.js', totalQuestions: 10 },
+  { _id: '1', name: 'React', totalQuestions: 5 },
+  { _id: '2', name: 'Next.js', totalQuestions: 8 },
+  { _id: '3', name: 'JavaScript', totalQuestions: 5 },
+  { _id: '4', name: 'TypeScript', totalQuestions: 6 },
+  { _id: '5', name: 'Node.js', totalQuestions: 10 },
 ]
 
 const RightSidebar = () => {
@@ -48,7 +48,7 @@ const RightSidebar = () => {
       </div>
       <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
-        <div className="mt-7 flex flex-col gap-4">
+        <div className="mt-7 flex flex-col gap-4 pr-1">
           {popularTags.map((tag) => (
             <RenderTag
               key={tag._id}

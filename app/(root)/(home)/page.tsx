@@ -1,3 +1,4 @@
+import QuestionCard from '@/components/cards/QuestionCard'
 import HomeFilters from '@/components/home/HomeFilters'
 import Filter from '@/components/shared/Filter'
 import NoResult from '@/components/shared/NoResult'
@@ -7,32 +8,50 @@ import { HomePageFilters } from '@/constants/filters'
 import Link from 'next/link'
 
 const questions = [
-  /*   {
-    _id: 1,
-    tittle: 'Cascading Deletes in SQLAlchemy?',
+  {
+    _id: '1',
+    title: 'Cascading Deletes in SQLAlchemy?',
     tags: [
-      { _id: 1, name: 'python' },
-      { _id: 2, name: 'sql' },
+      { _id: '1', name: 'python' },
+      { _id: '2', name: 'sql' },
     ],
-    author: 'John Doe',
-    upvotes: 10,
-    views: 20,
-    answers: 2,
-    createdAt: '2024-06-14T09:00:00.000Z',
+    author: {
+      _id: '1',
+      name: 'John Doe',
+      picture: 'https://randomuser.me/api/portraits/men/1.jpg',
+    },
+    upvotes: 326556,
+    views: 6323464,
+    answers: [
+      {
+        _id: '1',
+        content: 'Use the delete cascade option in your model definition.',
+      },
+    ],
+    createdAt: new Date('2024-06-14T09:00:00.000Z'),
   },
   {
-    _id: 2,
-    tittle: 'How to use React Router?',
+    _id: '2',
+    title: 'How to use React Router?',
     tags: [
-      { _id: 1, name: 'react' },
-      { _id: 2, name: 'router' },
+      { _id: '1', name: 'react' },
+      { _id: '3', name: 'router' },
     ],
-    author: 'Jane Doe',
-    upvotes: 10,
-    views: 20,
-    answers: 2,
-    createdAt: '2024-07-17T09:00:00.000Z',
-  }, */
+    author: {
+      _id: '2',
+      name: 'Jane Doe',
+      picture: 'https://randomuser.me/api/portraits/women/2.jpg',
+    },
+    upvotes: 15546750,
+    views: 25987600,
+    answers: [
+      {
+        _id: '2',
+        content: 'Use the `useHistory` hook to navigate programmatically.',
+      },
+    ],
+    createdAt: new Date('2024-07-17T09:00:00.000Z'),
+  },
 ]
 
 export default function Home() {
@@ -66,11 +85,28 @@ export default function Home() {
 
       <HomeFilters />
 
-      <div className="mt-10 flex w-full flex-col">
+      <div className="mt-10 flex w-full flex-col gap-6">
         {questions.length > 0 ? (
-          questions.map((question) => 'QuestionCard')
+          questions.map((question) => (
+            <QuestionCard
+              key={question._id}
+              _id={question._id}
+              title={question.title}
+              tags={question.tags}
+              author={question.author}
+              upvotes={question.upvotes}
+              views={question.views}
+              answers={question.answers}
+              createdAt={question.createdAt}
+            />
+          ))
         ) : (
-          <NoResult />
+          <NoResult
+            title="There's no question to show"
+            description="Be the first to ask! 🚀 Ask a question and kickstart the discussion. Our query could be the next big thing others learn from. Get involved! 💡"
+            link="/ask-question"
+            linkTitle="Ask a Question"
+          />
         )}
       </div>
     </>
