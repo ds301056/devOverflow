@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
+  darkMode: ['class'], // Enable dark mode with class strategy
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -18,8 +18,9 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          500: '#FF7000',
           100: '#FFF1E6',
+          500: '#FF7000',
+          600: '#cc5c00', // Add the primary-600 color
         },
         dark: {
           100: '#000000',
@@ -40,6 +41,28 @@ module.exports = {
         'accent-blue': '#1DA1F2',
         'custom-light-hover': 'rgba(244, 246, 248, 1)', // Custom light hover color
         'custom-dark-hover': 'rgba(13, 13, 13, 1)', // Custom dark hover color updated to match dark-600
+      },
+      textColor: {
+        'dark-100_light-900': {
+          light: '#FFFFFF',
+          dark: '#000000',
+        },
+        'dark-200_light-800': {
+          light: '#F4F6F8',
+          dark: '#0F1117',
+        },
+        'dark-300_light-700': {
+          light: '#DCE3F1',
+          dark: '#151821',
+        },
+        'dark-400_light-600': {
+          light: '#858EAD',
+          dark: '#212734',
+        },
+        'dark-500_light-500': {
+          light: '#7B8EC8',
+          dark: '#101012',
+        },
       },
       fontFamily: {
         inter: ['var(--font-inter)'],
@@ -83,9 +106,6 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         shimmer: 'shimmer 1s ease-in-out infinite',
-      },
-      textColor: {
-        'dark-400_light700': 'text-dark-400 dark:text-light-700',
       },
     },
   },
