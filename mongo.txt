@@ -1,0 +1,16 @@
+
+project: 
+devOverflow
+
+username: 
+ds301056
+
+
+password: 
+cq2mQWqOPSYQWQg8
+
+
+
+driver key Nodejs:
+mongodb+srv://ds301056:<cq2mQWqOPSYQWQg8>@devoverflow.epbxk8f.mongodb.net/?retryWrites=true&w=majority&appName=devOverflow
+
