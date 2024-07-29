@@ -127,7 +127,7 @@ const Question = () => {
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
                 <FormLabel className="paragraph-semibold text-dark-400 dark:text-light-800">
-                  Explanation
+                  Detailed explanation of your problem
                 </FormLabel>
                 <FormControl className="mt-3.5">
                   <Editor
