@@ -44,7 +44,13 @@ const Question = () => {
       // make an async cal lto your API -> create a question
       // contain all form data in values
 
-      await createQuestion({})
+      await createQuestion({
+      title: values.title,
+      content: values.explanation,
+      tags: values.tags,
+      author: 
+    })
+
     } catch (error) {
     } finally {
       setIsSubmitting(false)
