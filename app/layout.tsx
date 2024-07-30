@@ -1,5 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs' // import the ClerkProvider, SignedIn, SignedOut, SignInButton, and UserButton components from the Clerk SDK
 import React from 'react'
+// eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from 'next/font/google' // import the Inter and Space_Grotesk fonts from the Google Fonts API
 import type { Metadata } from 'next' // import the Metadata type from the next package
 
