@@ -3,8 +3,25 @@
 import Question from '@/database/question.model'
 import { connectToDatabase } from '../mongoose'
 import Tag from '@/database/tag.model'
+import { CreateQuestionParams, GetQuestionsParams } from './shared.types'
+import User from '@/database/user.model'
+import { revalidatePath } from 'next/cache'
 
-export async function createQuestion(params: any) {
+export async function getQuestions(params: GetQuestionsParams) {
+  try {
+    connectToDatabase()
+    const questions = await Question.find({})
+      .populate({ path: 'tags', model: Tag })
+      .populate({ path: 'author', model: User })
+      .sort({ createdAt: -1 })
+
+    return { questions }
+  } catch (error) {
+    console.error('Error getting questions:', error)
+    throw error
+  }
+}
+export async function createQuestion(params: CreateQuestionParams) {
   // eslint-disable-next-line no-empty
   try {
     // Connect to the database
@@ -47,6 +64,10 @@ export async function createQuestion(params: any) {
     // create an interaction record for the user's ask_question action
 
     // increment authors reputation by 5 for creating question
+
+    // revalidate path so the question is automatically displayed without refreshing the home page after creation
+
+    revalidatePath(path)
   } catch (error) {
     // Handle any errors that occur during the process
     console.error('Error creating question:', error)
