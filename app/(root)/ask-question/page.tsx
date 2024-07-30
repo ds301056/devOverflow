@@ -5,7 +5,9 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 
 const Page = async () => {
-  const { userId } = auth()
+  // const { userId } = auth()
+
+  const userId = 'clerk12345'
 
   if (!userId) redirect('/sign-in')
   const mongoUser = await getUserById({ userId })
@@ -19,7 +21,7 @@ const Page = async () => {
       </h1>{' '}
       {/* Updated className */}
       <div>
-        <Question />
+        <Question mongoUserId={JSON.stringify(mongoUser._id)} />
       </div>
     </div>
   )
