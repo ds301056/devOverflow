@@ -5,6 +5,7 @@ import { Inter, Space_Grotesk } from 'next/font/google' // import the Inter and 
 import type { Metadata } from 'next' // import the Metadata type from the next package
 
 import './globals.css' // import the global styles from the globals.css file
+import '../styles/prism.css' // import the PrismJS styles from the prism.css file
 import { ThemeProvider } from '@/context/ThemeProvider'
 
 // create a new Inter font with the specified options

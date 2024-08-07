@@ -21,6 +21,7 @@ import { Badge } from '../ui/badge' // Importing a custom badge component.
 import Image from 'next/image' // Importing the Next.js image component.
 import { createQuestion } from '@/lib/actions/question.action' // Importing the createQuestion API action.
 import { useRouter, usePathname } from 'next/navigation' // Importing hooks for routing and pathname.
+import { useTheme } from '@/context/ThemeProvider'
 
 const type: any = 'create' // Define a variable to distinguish between creating and editing questions.
 
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const Question = ({ mongoUserId }: Props) => {
+  const { mode } = useTheme() // Get the current theme mode
   const editorRef = useRef(null) // Create a ref for the TinyMCE editor.
   const [isSubmitting, setIsSubmitting] = useState(false) // Create a state to manage form submission status.
   const router = useRouter() // Get the router instance for navigation.
@@ -180,6 +182,8 @@ const Question = ({ mongoUserId }: Props) => {
                       'codesample | bold italic forecolor | alignleft aligncenter |' +
                       'alignright alignjustify | bullist numlist',
                     content_style: 'body { font-family:Inter; font-size:16px }',
+                    skin: mode === 'dark' ? 'oxide-dark' : 'oxide',
+                    content_css: mode === 'dark' ? 'dark' : 'light',
                   }}
                 />
               </FormControl>
