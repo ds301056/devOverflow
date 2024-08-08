@@ -2,7 +2,6 @@ import { Schema } from 'mongoose'
 
 import { IUser } from '@/mongodb'
 
-// collapse(1:159)
 export interface CreateAnswerParams {
   content: string
   author: string // User ID
@@ -31,7 +30,7 @@ export interface DeleteAnswerParams {
 }
 
 export interface SearchParams {
-  query?: string | null
+  query: string
   type?: string | null
 }
 
@@ -88,6 +87,7 @@ export interface EditQuestionParams {
   questionId: string
   title: string
   content: string
+  tags: string[]
   path: string
 }
 

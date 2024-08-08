@@ -1,20 +1,34 @@
-// page for every question in the app
-
 import Answer from '@/components/forms/Answer'
 import Metric from '@/components/shared/Metric'
 import ParseHTML from '@/components/shared/ParseHTML'
 import RenderTag from '@/components/shared/RenderTag'
 import { getQuestionById } from '@/lib/actions/question.action'
-import { formatAndDivideNumber, getTimeStamp } from '@/lib/utils'
+import { formatAndDivideNumber, getTimestamp } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { auth } from '@clerk/nextjs/server'
+import { getUserById } from '@/lib/actions/user.action'
+import AllAnswers from '@/components/shared/AllAnswers'
 
 const page = async ({ params, searchParams }) => {
+  // Get the user id from the Clerk session
+  const { userId: clerkId } = auth()
+
+  let mongoUser = null
+
+  if (clerkId) {
+    try {
+      mongoUser = await getUserById({ userId: clerkId })
+    } catch (error) {
+      console.error('Failed to fetch user:', error)
+    }
+  }
+
+  // params comes from URL bar and searchParams comes from query params
   const result = await getQuestionById({ questionId: params.id })
 
-  // wrap everything within a react fragment because there can only be one return element
-
+  // Wrap everything within a React fragment because there can only be one return element
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -44,7 +58,7 @@ const page = async ({ params, searchParams }) => {
         <Metric
           imgUrl="/assets/icons/clock.svg"
           alt="clock icon"
-          value={` asked ${getTimeStamp(result.createdAt)}`}
+          value={` asked ${getTimestamp(result.createdAt)}`}
           title=" Asked"
           textStyles="small-medium text-dark400_light800"
         />
@@ -76,7 +90,23 @@ const page = async ({ params, searchParams }) => {
         ))}
       </div>
 
-      <Answer />
+      {mongoUser && (
+        <>
+          <AllAnswers
+            questionId={JSON.stringify(result._id)}
+            userId={JSON.stringify(mongoUser._id)}
+            totalAnswers={result.answers.length}
+          />
+
+          <Answer
+            question={result.content}
+            questionId={JSON.stringify(result._id)}
+            authorId={JSON.stringify(mongoUser._id)}
+          />
+        </>
+      )}
+
+      {!mongoUser && <p>User not found or not authenticated</p>}
     </>
   )
 }
