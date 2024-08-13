@@ -35,7 +35,15 @@ export const getTimestamp = (createdAt: Date): string => {
     return `${seconds} second${seconds > 1 ? 's' : ''} ago`
   }
 }
-export const formatAndDivideNumber = (number: number): string => {
+export const formatAndDivideNumber = (
+  number: number | undefined | null,
+): string => {
+  // Check if the number is undefined or null
+  // This prevents calling toString on an undefined or null value
+  if (number === undefined || number === null) {
+    return '0' // Return '0' or any default value you'd prefer when the number is undefined or null
+  }
+
   if (number >= 1000000) {
     // If the number is greater than or equal to one million
     const millions = (number / 1000000).toFixed(1) // Divide by one million and keep one decimal place
@@ -46,6 +54,6 @@ export const formatAndDivideNumber = (number: number): string => {
     return `${thousands}k` // Return the formatted string with 'k' for thousands
   } else {
     // If the number is less than one thousand, return it as is
-    return number.toString()
+    return number.toString() // Convert the number to a string and return it
   }
 }

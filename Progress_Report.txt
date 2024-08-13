@@ -39,3 +39,31 @@ vid 65 progress @ 2:07
 8/8/2024
 vid 65 @ 10:50 // broken due to object error 
 
+8/12/3:20 pm // diagnosing hydration error by removing components 1 by 1 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+HYDRATION ERROR CAUSED IN 
+F:\GitHub\devoverflow\app\(root)\community\page.tsx
+by :
+<section className="mt-12 flex flex-wrap gap-4">
+        {result.users.length > 0 ? (
+          result.users.map((user) => <UserCard key={user._id} user={user} />)
+        ) : (
+          <div className="paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center">
+            <p>No users yet</p>
+            <Link href="/sign-up" className="mt-2 font-bold text-accent-blue">
+              Join to be the first!
+            </Link>
+          </div>
+        )}
+      </section>
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+8/12/4:20 pm
+finished vid 65
+
+
