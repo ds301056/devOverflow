@@ -106,7 +106,7 @@ const page = async ({ params, searchParams }) => {
         <>
           <AllAnswers
             questionId={result._id}
-            userId={JSON.stringify(mongoUser._id)}
+            userId={mongoUser._id}
             totalAnswers={result.answers.length}
           />
 

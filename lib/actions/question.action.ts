@@ -164,7 +164,7 @@ export async function downVoteQuestion(params: QuestionVoteParams) {
 
     revalidatePath(path)
   } catch (error) {
-    console.error('Error upvoting question:', error)
+    console.error('Error downvoting question:', error)
     throw error
   }
 }
