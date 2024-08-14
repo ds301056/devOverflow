@@ -1,16 +1,11 @@
-// we are going to use PrismJS to highlight the code syntax in the blog post. We will create a new component called ParseHTML.tsx in the shared folder.
-
-// The ParseHTML component will take the HTML content as a prop and render it using the dangerouslySetInnerHTML attribute.
-
-// We will then use PrismJS to highlight the code syntax in the HTML content.
-
 'use client'
 
-import React, { useEffect } from 'react' // npm install react
+import React, { useEffect } from 'react'
 
-import Prism from 'prismjs' // npm install prismjs
-import parse from 'html-react-parser' // npm install html-react-parser
+import Prism from 'prismjs'
+import parse from 'html-react-parser'
 
+import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-java'
 import 'prismjs/components/prism-c'
 import 'prismjs/components/prism-cpp'
@@ -42,7 +37,7 @@ const ParseHTML = ({ data }: Props) => {
     Prism.highlightAll()
   }, [])
 
-  return <div>{parse(data)}</div>
+  return <div className={'markdown w-full min-w-full'}>{parse(data)}</div>
 }
 
 export default ParseHTML
