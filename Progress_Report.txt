@@ -70,5 +70,8 @@ finished vid 65
 start vid 71 
 
 
-vid 75
+vid 75 done
+
+8/15/2024
+vid 80 _ just starting 0:00
 
