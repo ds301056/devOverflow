@@ -15,7 +15,7 @@ export default async function Home() {
     clerkId: userId,
   })
 
-  console.log(result.questions)
+  // console.log(result.questions)
 
   return (
     // react fragment
