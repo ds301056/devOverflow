@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     // Do something with the payload
     const eventType = evt.type
 
-    console.log({ eventType })
+    // console.log({ eventType })
 
     if (eventType === 'user.created') {
       const {
