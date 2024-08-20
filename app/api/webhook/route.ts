@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 export async function POST(req: Request) {
   try {
     // Debugging: Log the environment variable to ensure it is loaded
-    console.log('Environment Variables:', process.env.NEXT_CLERK_WEBHOOK_SECRET)
+    // console.log('Environment Variables:', process.env.NEXT_CLERK_WEBHOOK_SECRET)
 
     const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET
 

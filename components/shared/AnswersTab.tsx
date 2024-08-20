@@ -13,7 +13,7 @@ const AnswersTab = async ({ searchProps, userId, clerkId }: Props) => {
     page: 1,
   })
 
-  console.log(result.answers)
+  // console.log(result.answers)
 
   return (
     <>
