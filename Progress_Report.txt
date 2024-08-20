@@ -93,4 +93,4 @@ finished vid 93
 
 8/20/2024
 4:54 pm 
-vid 93 @ 7:11 profile.tsx and F:\GitHub\devoverflow\app\(root)\profile\edit\page.tsx
+vid 94 @ 7:11 profile.tsx and F:\GitHub\devoverflow\app\(root)\profile\edit\page.tsx
