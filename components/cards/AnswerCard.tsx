@@ -48,9 +48,9 @@ const AnswerCard = ({
         </div>
 
         <SignedIn>
-          {/* {showActionButtons && (
+          {showActionButtons && (
             <EditDeleteAction type="Answer" itemId={JSON.stringify(_id)} />
-          )} */}
+          )}
         </SignedIn>
       </div>
 

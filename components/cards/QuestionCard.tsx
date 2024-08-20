@@ -56,7 +56,7 @@ const QuestionCard = ({
           {/* trash can to delete */}
 
           {showActionButtons && (
-            <EditDeleteAction /> // This component will have the edit and delete buttons
+            <EditDeleteAction type="Question" itemId={JSON.stringify(_id)} /> // This component will have the edit and delete buttons
           )}
         </SignedIn>
 

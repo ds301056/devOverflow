@@ -5,6 +5,8 @@ import {
   CreateQuestionParams,
   GetQuestionsParams,
   QuestionVoteParams,
+  DeleteQuestionParams,
+  EditQuestionParams,
 } from './shared.types.d'
 
 import Question from '@/database/question.model'
@@ -13,6 +15,8 @@ import Tag from '@/database/tag.model'
 
 import User from '@/database/user.model'
 import { revalidatePath } from 'next/cache'
+import Answer from '@/database/answer.model'
+import Interaction from '@/database/interaction.model'
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
@@ -165,6 +169,62 @@ export async function downVoteQuestion(params: QuestionVoteParams) {
     revalidatePath(path)
   } catch (error) {
     console.error('Error downvoting question:', error)
+    throw error
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDatabase()
+
+    // destructure params to extract questionId and path
+    const { questionId, path } = params
+
+    // delete one question by its ID
+    await Question.deleteOne({ _id: questionId })
+
+    // delete all answers associated with the question
+    await Answer.deleteMany({ question: questionId })
+
+    // delete all interactions related to the question
+    await Interaction.deleteMany({ question: questionId })
+
+    // delete tags associated with the question
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } },
+    )
+
+    // revalidate path so the question is automatically removed from the home page without refreshing
+    revalidatePath(path)
+  } catch (error) {
+    console.error('Error deleting question:', error)
+    throw error
+  }
+}
+
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    connectToDatabase()
+
+    // destructure params to extract questionId and path
+    const { questionId, title, content, path } = params
+
+    const question = await Question.findById(questionId).populate('tags')
+
+    if (!question) {
+      throw new Error('Question not found')
+    }
+
+    question.title = title
+    question.content = content
+
+    await question.save() // save the updated question
+
+    // revalidate path so the question is automatically removed from the home page without refreshing
+    revalidatePath(path)
+  } catch (error) {
+    console.error('Error deleting question:', error)
     throw error
   }
 }

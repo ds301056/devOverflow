@@ -5,10 +5,13 @@ import { connectToDatabase } from '../mongoose'
 import {
   AnswerVoteParams,
   CreateAnswerParams,
+  DeleteAnswerParams,
   GetAnswersParams,
 } from './shared.types'
 import Question from '@/database/question.model'
 import { revalidatePath } from 'next/cache'
+import Interaction from '@/database/interaction.model'
+import { Tag } from 'lucide-react'
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
@@ -115,6 +118,45 @@ export async function downVoteAnswer(params: AnswerVoteParams) {
     revalidatePath(path)
   } catch (error) {
     console.error('Error downvoting answer:', error)
+    throw error
+  }
+}
+
+export async function deleteAnswer(params: DeleteAnswerParams) {
+  try {
+    connectToDatabase()
+
+    // destructure params to extract questionId and path
+    const { answerId, path } = params
+
+    // find answer to remove by its ID
+    const answer = await Answer.findById(answerId)
+
+    // if there is no answer
+    if (!answer) {
+      throw new Error('Answer not found')
+    }
+
+    // if there is an answer
+    await answer.deleteOne({ _id: answerId })
+
+    // delete one question by its ID
+    await Question.updateMany(
+      { _id: answer.question },
+      {
+        $pull: {
+          answers: answerId,
+        },
+      },
+    )
+
+    // delete all answers associated with the question
+    await Interaction.deleteMany({ answer: answerId })
+
+    // revalidate path so the question is automatically removed from the home page without refreshing
+    revalidatePath(path)
+  } catch (error) {
+    console.error('Error deleting question:', error)
     throw error
   }
 }
