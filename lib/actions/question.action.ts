@@ -23,7 +23,7 @@ export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase()
 
-    const { searchQuery } = params // destructure searchQuery from params
+    const { searchQuery, filter } = params // destructure searchQuery from params
 
     const query: FilterQuery<typeof Question> = {}
 
@@ -34,10 +34,30 @@ export async function getQuestions(params: GetQuestionsParams) {
       ]
     }
 
+    // get questions by filter
+    let sortOptions = {} // empty object to store sort options
+
+    switch (filter) {
+      case 'newest': // sort by createdAt in descending order
+        sortOptions = { createdAt: -1 }
+
+        break
+      case 'frequent': // sort by views in descending order
+        sortOptions = { views: -1 }
+
+        break
+      case 'unanswered': // get questions with no answers
+        query.answers = { $size: 0 }
+
+        break
+      default:
+        break
+    }
+
     const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User })
-      .sort({ createdAt: -1 })
+      .sort(sortOptions) // sort the questions by the sort options
 
     return { questions }
   } catch (error) {
