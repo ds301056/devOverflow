@@ -228,3 +228,19 @@ export async function editQuestion(params: EditQuestionParams) {
     throw error
   }
 }
+
+export async function getHotQuestions() {
+  try {
+    connectToDatabase()
+
+    // get hot questions by sorting by views and upvotes in descending order and limit to 5
+    const hotQuestions = await Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5)
+
+    return hotQuestions
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
