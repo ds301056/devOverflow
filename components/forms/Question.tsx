@@ -37,10 +37,11 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   const pathname = usePathname() // Get the current pathname.
 
   // If the type is 'Edit', set the default values to the question details.
-  const parsedQuestionDetails = JSON.parse(questionDetails || '')
+  const parsedQuestionDetails =
+    questionDetails && JSON.parse(questionDetails || '')
 
   // populate tags array with existing tags for the question
-  const groupedTags = parsedQuestionDetails.tags.map((tag) => tag.name)
+  const groupedTags = parsedQuestionDetails?.tags.map((tag) => tag.name)
 
   // log question details content
   // console.log(parsedQuestionDetails.content)
@@ -49,8 +50,8 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: parsedQuestionDetails.title || '',
-      explanation: parsedQuestionDetails.content || '',
+      title: parsedQuestionDetails?.title || '',
+      explanation: parsedQuestionDetails?.content || '',
       tags: groupedTags || [],
     },
   })
@@ -176,7 +177,7 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)} // Update the form value when editor content changes.
-                  initialValue={parsedQuestionDetails.content || ''}
+                  initialValue={parsedQuestionDetails?.content || ''}
                   init={{
                     height: 350,
                     menubar: false,
