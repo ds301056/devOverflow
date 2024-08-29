@@ -1,8 +1,10 @@
 'use client'
 
 import { Input } from '@/components/ui/input'
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
 import Image from 'next/image'
-import React from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 // declare the props being passed into the interface of the component
 interface CustomInputProps {
@@ -21,6 +23,42 @@ const LocalSearchbar = ({
   placeholder,
   otherClasses,
 }: CustomInputProps) => {
+  const router = useRouter() // use the useRouter hook to get the current route
+  const pathname = usePathname() // use the usePathname hook to get the current pathname
+  const searchParams = useSearchParams() // use the useSearchParams hook to get the current search params
+
+  const query = searchParams.get('q') // get the value of the search query
+
+  const [search, setSearch] = useState(query || '') // set the search query to an empty string
+
+  // console.log(query)
+
+  // handle the search query change url based off input value
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (search) {
+        const newUrl = formUrlQuery({
+          params: searchParams.toString(),
+          key: 'q',
+          value: search,
+        })
+
+        router.push(newUrl, { scroll: false }) // push the new url to the router
+      } else {
+        if (pathname === route) {
+          const newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ['q'],
+          })
+
+          router.push(newUrl, { scroll: false }) // push the new empty url to the router
+        }
+      }
+    }, 300)
+
+    return () => clearTimeout(delayDebounceFn) // clear the timeout
+  }, [search, route, pathname, router, searchParams, query])
+
   return (
     <div
       className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
@@ -38,9 +76,9 @@ const LocalSearchbar = ({
       <Input
         type="text"
         placeholder={placeholder}
-        value=""
-        onChange={() => {}}
-        className="paragraph-regular no-focus placeholder background-light800_darkgradient border-none shadow-none outline-none"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)} // set the search query to the value of the input
+        className="paragraph-regular no-focus placeholder background-light800_darkgradient text-dark100_light900 border-none shadow-none outline-none"
       />
 
       {iconPosition === 'right' && (

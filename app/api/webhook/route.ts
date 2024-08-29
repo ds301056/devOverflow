@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 export async function POST(req: Request) {
   try {
     // Debugging: Log the environment variable to ensure it is loaded
-    console.log('Environment Variables:', process.env.NEXT_CLERK_WEBHOOK_SECRET)
+    // console.log('Environment Variables:', process.env.NEXT_CLERK_WEBHOOK_SECRET)
 
     const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET
 
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     // Do something with the payload
     const eventType = evt.type
 
-    console.log({ eventType })
+    // console.log({ eventType })
 
     if (eventType === 'user.created') {
       const {

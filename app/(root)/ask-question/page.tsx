@@ -10,7 +10,7 @@ const Page = async () => {
   if (!userId) redirect('/sign-in')
   const mongoUser = await getUserById({ userId })
 
-  console.log(mongoUser)
+  // console.log(mongoUser)
 
   return (
     <div>
@@ -19,7 +19,7 @@ const Page = async () => {
       </h1>{' '}
       {/* Updated className */}
       <div>
-        <Question mongoUserId={JSON.stringify(mongoUser._id)} />
+        <Question mongoUserId={JSON.stringify(mongoUser?._id)} />
       </div>
     </div>
   )

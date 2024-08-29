@@ -35,7 +35,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     handleThemeChange()
   }, [mode]) // Dependency array with 'mode' to trigger the effect on mode changes
 
-  console.log('MODE, ', mode) // Log the current mode to the console
+  // console.log('MODE, ', mode) // Log the current mode to the console
 
   // Provide the theme context to the children components
   return (
