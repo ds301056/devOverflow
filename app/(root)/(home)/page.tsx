@@ -2,6 +2,7 @@ import QuestionCard from '@/components/cards/QuestionCard'
 import HomeFilters from '@/components/home/HomeFilters'
 import Filter from '@/components/shared/Filter'
 import NoResult from '@/components/shared/NoResult'
+import Pagination from '@/components/shared/Pagination'
 import LocalSearchbar from '@/components/shared/search/LocalSearchbar'
 import { Button } from '@/components/ui/button'
 import { HomePageFilters } from '@/constants/filters'
@@ -13,11 +14,10 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   })
 
-  // fetch recommended questions
-
-  // console.log(result.questions)
+  // Fetch Recommended Questions
 
   return (
     <>
@@ -25,8 +25,8 @@ export default async function Home({ searchParams }: SearchParamsProps) {
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
 
         <Link href="/ask-question" className="flex justify-end max-sm:w-full">
-          <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900 hover:animate-shimmer hover:bg-[200-percent] hover:bg-orange-600 hover:bg-shimmer-gradient-light hover:shadow-lg dark:hover:animate-shimmer dark:hover:bg-[200-percent] dark:hover:bg-shimmer-gradient-dark">
-            Ask Question
+          <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
+            Ask a Question
           </Button>
         </Link>
       </div>
@@ -66,12 +66,18 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           ))
         ) : (
           <NoResult
-            title="There's no questions to show"
-            description="Be the first to ask! 🚀 Ask a question and kickstart the discussion. Our query could be the next big thing others learn from. Get involved! 💡"
+            title="There’s no question to show"
+            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
             link="/ask-question"
             linkTitle="Ask a Question"
           />
         )}
+      </div>
+      <div className="mt-10">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </>
   )

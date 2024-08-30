@@ -1,18 +1,16 @@
 'use server'
 
+import Question from '@/database/question.model'
+import Tag from '@/database/tag.model'
+import { connectToDatabase } from '../mongoose'
 import {
-  GetQuestionByIdParams,
   CreateQuestionParams,
-  GetQuestionsParams,
-  QuestionVoteParams,
   DeleteQuestionParams,
   EditQuestionParams,
-} from './shared.types.d'
-
-import Question from '@/database/question.model'
-import { connectToDatabase } from '../mongoose'
-import Tag from '@/database/tag.model'
-
+  GetQuestionByIdParams,
+  GetQuestionsParams,
+  QuestionVoteParams,
+} from './shared.types'
 import User from '@/database/user.model'
 import { revalidatePath } from 'next/cache'
 import Answer from '@/database/answer.model'
@@ -23,7 +21,10 @@ export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase()
 
-    const { searchQuery, filter } = params // destructure searchQuery from params
+    const { searchQuery, filter, page = 1, pageSize = 2 } = params
+
+    // Calculcate the number of posts to skip based on the page number and page size
+    const skipAmount = (page - 1) * pageSize
 
     const query: FilterQuery<typeof Question> = {}
 
@@ -34,21 +35,17 @@ export async function getQuestions(params: GetQuestionsParams) {
       ]
     }
 
-    // get questions by filter
-    let sortOptions = {} // empty object to store sort options
+    let sortOptions = {}
 
     switch (filter) {
-      case 'newest': // sort by createdAt in descending order
+      case 'newest':
         sortOptions = { createdAt: -1 }
-
         break
-      case 'frequent': // sort by views in descending order
+      case 'frequent':
         sortOptions = { views: -1 }
-
         break
-      case 'unanswered': // get questions with no answers
+      case 'unanswered':
         query.answers = { $size: 0 }
-
         break
       default:
         break
@@ -57,70 +54,63 @@ export async function getQuestions(params: GetQuestionsParams) {
     const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User })
-      .sort(sortOptions) // sort the questions by the sort options
+      .skip(skipAmount)
+      .limit(pageSize)
+      .sort(sortOptions)
 
-    return { questions }
+    const totalQuestions = await Question.countDocuments(query)
+
+    const isNext = totalQuestions > skipAmount + questions.length
+
+    return { questions, isNext }
   } catch (error) {
-    console.error('Error getting questions:', error)
+    console.log(error)
     throw error
   }
 }
+
 export async function createQuestion(params: CreateQuestionParams) {
-  // eslint-disable-next-line no-empty
   try {
-    // Connect to the database
     connectToDatabase()
 
-    // Destructure parameters to extract required fields
     const { title, content, tags, author, path } = params
 
-    // Create a new question document
+    // Create the question
     const question = await Question.create({
       title,
       content,
       author,
     })
 
-    // Initialize an array to store tag document IDs
     const tagDocuments = []
 
-    // Iterate over each tag in the tags array
+    // Create the tags or get them if they already exist
     for (const tag of tags) {
-      // Find the tag by name (case-insensitive) and update it if it exists,
-      // or create a new tag if it doesn't (upsert option)
       const existingTag = await Tag.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${tag}$`, 'i') } }, // Case-insensitive search for the tag name
-        {
-          $setOnInsert: { name: tag }, // Set the name if the tag is being created
-          $push: { questions: question._id }, // Push the question ID to the tag's questions array
-        },
-        { upsert: true, new: true }, // Create the tag if it doesn't exist, and return the new document
+        { name: { $regex: new RegExp(`^${tag}$`, 'i') } },
+        { $setOnInsert: { name: tag }, $push: { questions: question._id } },
+        { upsert: true, new: true },
       )
-      // Push the tag document ID to the array
+
       tagDocuments.push(existingTag._id)
     }
 
-    // update the question
     await Question.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     })
 
-    // create an interaction record for the user's ask_question action
+    // Create an interaction record for the user's ask_question action
 
-    // increment authors reputation by 5 for creating question
-
-    // revalidate path so the question is automatically displayed without refreshing the home page after creation
+    // Increment author's reputation by +5 for creating a question
 
     revalidatePath(path)
-  } catch (error) {
-    // Handle any errors that occur during the process
-    console.error('Error creating question:', error)
-  }
+  } catch (error) {}
 }
 
 export async function getQuestionById(params: GetQuestionByIdParams) {
   try {
     connectToDatabase()
+
     const { questionId } = params
 
     const question = await Question.findById(questionId)
@@ -133,14 +123,15 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
 
     return question
   } catch (error) {
-    console.error('Error getting question by ID:', error)
+    console.log(error)
     throw error
   }
 }
 
-export async function upVoteQuestion(params: QuestionVoteParams) {
+export async function upvoteQuestion(params: QuestionVoteParams) {
   try {
     connectToDatabase()
+
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params
 
     let updateQuery = {}
@@ -159,28 +150,30 @@ export async function upVoteQuestion(params: QuestionVoteParams) {
     const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
       new: true,
     })
+
     if (!question) {
       throw new Error('Question not found')
     }
 
-    // Increment author's reputation by +10 for upvoting a question
+    // Increment author's reputation
 
     revalidatePath(path)
   } catch (error) {
-    console.error('Error upvoting question:', error)
+    console.log(error)
     throw error
   }
 }
 
-export async function downVoteQuestion(params: QuestionVoteParams) {
+export async function downvoteQuestion(params: QuestionVoteParams) {
   try {
     connectToDatabase()
+
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params
 
     let updateQuery = {}
 
     if (hasdownVoted) {
-      updateQuery = { $pull: { downvotes: userId } }
+      updateQuery = { $pull: { downvote: userId } }
     } else if (hasupVoted) {
       updateQuery = {
         $pull: { upvotes: userId },
@@ -193,15 +186,16 @@ export async function downVoteQuestion(params: QuestionVoteParams) {
     const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
       new: true,
     })
+
     if (!question) {
       throw new Error('Question not found')
     }
 
-    // Increment author's reputation by +10 for upvoting a question
+    // Increment author's reputation
 
     revalidatePath(path)
   } catch (error) {
-    console.error('Error downvoting question:', error)
+    console.log(error)
     throw error
   }
 }
@@ -210,29 +204,19 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
   try {
     connectToDatabase()
 
-    // destructure params to extract questionId and path
     const { questionId, path } = params
 
-    // delete one question by its ID
     await Question.deleteOne({ _id: questionId })
-
-    // delete all answers associated with the question
     await Answer.deleteMany({ question: questionId })
-
-    // delete all interactions related to the question
     await Interaction.deleteMany({ question: questionId })
-
-    // delete tags associated with the question
     await Tag.updateMany(
       { questions: questionId },
       { $pull: { questions: questionId } },
     )
 
-    // revalidate path so the question is automatically removed from the home page without refreshing
     revalidatePath(path)
   } catch (error) {
-    console.error('Error deleting question:', error)
-    throw error
+    console.log(error)
   }
 }
 
@@ -240,7 +224,6 @@ export async function editQuestion(params: EditQuestionParams) {
   try {
     connectToDatabase()
 
-    // destructure params to extract questionId and path
     const { questionId, title, content, path } = params
 
     const question = await Question.findById(questionId).populate('tags')
@@ -252,13 +235,11 @@ export async function editQuestion(params: EditQuestionParams) {
     question.title = title
     question.content = content
 
-    await question.save() // save the updated question
+    await question.save()
 
-    // revalidate path so the question is automatically removed from the home page without refreshing
     revalidatePath(path)
   } catch (error) {
-    console.error('Error deleting question:', error)
-    throw error
+    console.log(error)
   }
 }
 
@@ -266,7 +247,6 @@ export async function getHotQuestions() {
   try {
     connectToDatabase()
 
-    // get hot questions by sorting by views and upvotes in descending order and limit to 5
     const hotQuestions = await Question.find({})
       .sort({ views: -1, upvotes: -1 })
       .limit(5)
