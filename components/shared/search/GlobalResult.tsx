@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import GlobalFilters from './GlobalFilters'
+import { globalSearch } from '@/lib/actions/general.action'
 
 const GlobalResult = () => {
   const searchParams = useSearchParams()
@@ -26,6 +27,12 @@ const GlobalResult = () => {
 
       try {
         // fetch all data all at once global search
+        const res = await globalSearch({
+          query: global,
+          type,
+        })
+
+        setResult(JSON.parse(res))
       } catch (error) {
         console.error(error)
         throw error
@@ -33,11 +40,27 @@ const GlobalResult = () => {
         setIsLoading(false)
       }
     }
+
+    if (global) {
+      fetchResult()
+    }
   }, [global, type])
 
   // render the link based off tags and values
   const renderLink = (type: string, id: string) => {
-    return '/'
+    switch (type) {
+      case 'question':
+        return `/question/${id}` // return the question link
+      case 'tag':
+        return `/tags/${id}` // return the tag link
+      case 'user':
+        return `/profile/${id}` // return the user link
+      case 'answer':
+        return `/question/${id}` // return the answer link
+
+      default:
+        return '/'
+    }
   }
 
   return (
@@ -63,7 +86,7 @@ const GlobalResult = () => {
             {result.length > 0 ? (
               result.map((item: any, index: number) => (
                 <Link
-                  href={renderLink('type', 'id')}
+                  href={renderLink(item.type, item.id)}
                   key={item.type + item.id + index}
                   className="flex w-full cursor-pointer items-start gap-3 px-5 py-2.5 hover:bg-light-700/50 dark:hover:bg-dark-500/50"
                 >
