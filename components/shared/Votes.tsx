@@ -1,8 +1,8 @@
 'use client'
 
-import { downVoteAnswer, upVoteAnswer } from '@/lib/actions/answer.action'
+import { downvoteAnswer, upvoteAnswer } from '@/lib/actions/answer.action'
 import { viewQuestion } from '@/lib/actions/interaction.action'
-import { downVoteQuestion, upVoteQuestion } from '@/lib/actions/question.action'
+import { downvoteQuestion, upvoteQuestion } from '@/lib/actions/question.action'
 import { toggleSaveQuestion } from '@/lib/actions/user.action'
 import { formatAndDivideNumber } from '@/lib/utils'
 import Image from 'next/image'
@@ -48,7 +48,7 @@ const Votes = ({
 
     if (action === 'upvote') {
       if (type === 'Question') {
-        await upVoteQuestion({
+        await upvoteQuestion({
           questionId: JSON.parse(itemId),
           userId: JSON.parse(userId),
           hasupVoted,
@@ -56,7 +56,7 @@ const Votes = ({
           path: pathname,
         })
       } else if (type === 'Answer') {
-        await upVoteAnswer({
+        await upvoteAnswer({
           answerId: JSON.parse(itemId),
           userId: JSON.parse(userId),
           hasupVoted,
@@ -70,7 +70,7 @@ const Votes = ({
 
     if (action === 'downvote') {
       if (type === 'Question') {
-        await downVoteQuestion({
+        await downvoteQuestion({
           questionId: JSON.parse(itemId),
           userId: JSON.parse(userId),
           hasupVoted,
@@ -78,7 +78,7 @@ const Votes = ({
           path: pathname,
         })
       } else if (type === 'Answer') {
-        await downVoteAnswer({
+        await downvoteAnswer({
           answerId: JSON.parse(itemId),
           userId: JSON.parse(userId),
           hasupVoted,

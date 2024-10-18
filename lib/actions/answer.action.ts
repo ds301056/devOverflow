@@ -82,7 +82,7 @@ export async function getAnswers(params: GetAnswersParams) {
   }
 }
 
-export async function upVoteAnswer(params: AnswerVoteParams) {
+export async function upvoteAnswer(params: AnswerVoteParams) {
   try {
     connectToDatabase()
     const { answerId, userId, hasupVoted, hasdownVoted, path } = params
@@ -116,7 +116,7 @@ export async function upVoteAnswer(params: AnswerVoteParams) {
   }
 }
 
-export async function downVoteAnswer(params: AnswerVoteParams) {
+export async function downvoteAnswer(params: AnswerVoteParams) {
   try {
     connectToDatabase()
     const { answerId, userId, hasupVoted, hasdownVoted, path } = params
