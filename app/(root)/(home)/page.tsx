@@ -9,6 +9,7 @@ import { HomePageFilters } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
 import { SearchParamsProps } from '@/types'
 import Link from 'next/link'
+import Loading from './loading'
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
@@ -18,6 +19,10 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   })
 
   // Fetch Recommended Questions
+
+  // loading animation testing
+  // const isLoading = true
+  // if (isLoading) return <Loading />
 
   return (
     <>

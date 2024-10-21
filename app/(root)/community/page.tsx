@@ -6,6 +6,7 @@ import { UserFilters } from '@/constants/filters'
 import { getAllUsers } from '@/lib/actions/user.action'
 import { SearchParamsProps } from '@/types'
 import Link from 'next/link'
+import Loading from './loading'
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({
@@ -14,6 +15,9 @@ const page = async ({ searchParams }: SearchParamsProps) => {
     page: searchParams.page ? +searchParams.page : 1, // convert to number to fix hydration error
   })
 
+  // test loading state
+  // const isLoading = true
+  // if (isLoading) return <Loading />
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Users</h1>
