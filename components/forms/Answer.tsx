@@ -22,7 +22,7 @@ interface Props {
 const Answer = ({ question, questionId, authorId }: Props) => {
   const pathname = usePathname()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [setIsSubmittingAI, setSetIsSubmittingAI] = useState(false)
+  const [IsSubmittingAI, setSetIsSubmittingAI] = useState(false)
 
   const { mode } = useTheme()
   const editorRef = useRef(null)
@@ -76,7 +76,20 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 
       const aiAnswer = await response.json() // the question response
 
-      alert(aiAnswer.reply)
+      // convert plain text response into html format for the editor
+      const formattedAnswer = aiAnswer.reply.replace(/\n/g, '<br />')
+
+      // does the result have access to the editor ?
+      if (editorRef.current) {
+        const editor = editorRef.current as any
+
+        // set the content of the editor to the formatted answer
+        editor.setContent(formattedAnswer)
+      }
+
+      // TOAST...
+
+      // alert(aiAnswer.reply)
     } catch (error) {
       console.log(error) // log an error for submitting AI question
     } finally {
@@ -97,14 +110,20 @@ const Answer = ({ question, questionId, authorId }: Props) => {
             generateAIAnswer()
           }}
         >
-          <Image
-            src="/assets/icons/stars.svg"
-            alt="star"
-            width={12}
-            height={12}
-            className="object-contain"
-          />
-          Generate AI Answer
+          {IsSubmittingAI ? (
+            <>Generating...</>
+          ) : (
+            <>
+              <Image
+                src="/assets/icons/stars.svg"
+                alt="star"
+                width={12}
+                height={12}
+                className="object-contain"
+              />
+              Generate AI Answer
+            </>
+          )}
         </Button>
       </div>
 
