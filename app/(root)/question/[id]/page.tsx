@@ -49,24 +49,27 @@ const page = async ({ params, searchParams }: any) => {
               alt="profile"
             />
             <p className="paragraph-semibold text-dark300_light700">
-              {result.author.name || 'Anonymous'}
+              {result.author.name || 'Anonymous'} {/* Fallback name */}
             </p>
           </Link>
           <div className="flex justify-end">
-            <Votes
-              type="Question"
-              itemId={result._id ? JSON.stringify(result._id) : ''} // Safe check for result._id
-              userId={mongoUser ? JSON.stringify(mongoUser._id) : ''} // Safe check for mongoUser
-              upvotes={result.upvotes.length}
-              hasupVoted={
-                mongoUser ? result.upvotes.includes(mongoUser._id) : false
-              } // Safe check for mongoUser
-              downvotes={result.downvotes.length}
-              hasdownVoted={
-                mongoUser ? result.downvotes.includes(mongoUser._id) : false
-              } // Safe check for mongoUser
-              hasSaved={mongoUser?.saved?.includes(result._id)} // Optional chaining to handle potential null values
-            />
+            {/* Only show voting for authenticated users */}
+            {mongoUser && (
+              <Votes
+                type="Question"
+                itemId={result._id ? JSON.stringify(result._id) : ''}
+                userId={mongoUser ? JSON.stringify(mongoUser._id) : ''}
+                upvotes={result.upvotes.length}
+                hasupVoted={
+                  mongoUser ? result.upvotes.includes(mongoUser._id) : false
+                }
+                downvotes={result.downvotes.length}
+                hasdownVoted={
+                  mongoUser ? result.downvotes.includes(mongoUser._id) : false
+                }
+                hasSaved={mongoUser?.saved?.includes(result._id)}
+              />
+            )}
           </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
@@ -111,18 +114,16 @@ const page = async ({ params, searchParams }: any) => {
         ))}
       </div>
 
-      {/* Ensure mongoUser is defined before accessing its properties */}
-      {mongoUser && (
-        <AllAnswers
-          questionId={result._id}
-          userId={mongoUser._id} // Safe access to mongoUser
-          totalAnswers={result.answers.length}
-          page={searchParams?.page}
-          filter={searchParams?.filter}
-        />
-      )}
+      {/* Render answers for everyone */}
+      <AllAnswers
+        questionId={result._id}
+        userId={mongoUser?._id} // Safe access to mongoUser
+        totalAnswers={result.answers.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
+      />
 
-      {/* Only render Answer component if mongoUser is available */}
+      {/* Only render answer form for authenticated users */}
       {mongoUser && (
         <Answer
           question={result.content}
@@ -131,7 +132,8 @@ const page = async ({ params, searchParams }: any) => {
         />
       )}
 
-      {!mongoUser && <p>User not authenticated</p>}
+      {/* Optionally display message for unauthenticated users */}
+      {!mongoUser && <p>You must sign in to submit an answer or vote.</p>}
     </>
   )
 }
