@@ -41,7 +41,7 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
     questionDetails && JSON.parse(questionDetails || '')
 
   // populate tags array with existing tags for the question
-  const groupedTags = parsedQuestionDetails?.tags.map((tag) => tag.name)
+  const groupedTags = parsedQuestionDetails?.tags.map((tag: any) => tag.name)
 
   // log question details content
   // console.log(parsedQuestionDetails.content)

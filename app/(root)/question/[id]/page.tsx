@@ -12,7 +12,7 @@ import { getUserById } from '@/lib/actions/user.action'
 import AllAnswers from '@/components/shared/AllAnswers'
 import Votes from '@/components/shared/Votes'
 
-const page = async ({ params, searchParams }) => {
+const page = async ({ params, searchParams }: any) => {
   // Get the user id from the Clerk session
   const { userId: clerkId } = auth()
 
