@@ -16,7 +16,7 @@ const page = async ({ params, searchParams }: any) => {
   // Get the user id from the Clerk session
   const { userId: clerkId } = auth()
 
-  let mongoUser = null
+  let mongoUser
 
   if (clerkId) {
     try {
