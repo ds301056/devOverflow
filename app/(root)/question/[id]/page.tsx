@@ -133,7 +133,13 @@ const page = async ({ params, searchParams }: any) => {
       )}
 
       {/* Optionally display message for unauthenticated users */}
-      {!mongoUser && <p>You must sign in to submit an answer or vote.</p>}
+      {!mongoUser && (
+        <div className="w-full justify-center p-6">
+          <p className="paragraph-semibold text-dark300_light700 text-primary-500">
+            You must sign in to submit an answer or vote.
+          </p>
+        </div>
+      )}
     </>
   )
 }
