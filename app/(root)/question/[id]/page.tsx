@@ -19,11 +19,7 @@ const page = async ({ params, searchParams }: any) => {
   let mongoUser
 
   if (clerkId) {
-    try {
-      mongoUser = await getUserById({ userId: clerkId })
-    } catch (error) {
-      console.error('Failed to fetch user:', error)
-    }
+    mongoUser = await getUserById({ userId: clerkId })
   }
 
   // params comes from URL bar and searchParams comes from query params
@@ -66,6 +62,7 @@ const page = async ({ params, searchParams }: any) => {
           {result.title}
         </h2>
       </div>
+
       <div className="mb-8 mt-5 flex flex-wrap gap-4">
         <Metric
           imgUrl="/assets/icons/clock.svg"
@@ -89,6 +86,7 @@ const page = async ({ params, searchParams }: any) => {
           textStyles="small-medium text-dark400_light800"
         />
       </div>
+
       <ParseHTML data={result.content} />
 
       <div className="mt-8 flex flex-wrap gap-2">
@@ -102,25 +100,19 @@ const page = async ({ params, searchParams }: any) => {
         ))}
       </div>
 
-      {mongoUser && (
-        <>
-          <AllAnswers
-            questionId={result._id}
-            userId={mongoUser._id}
-            totalAnswers={result.answers.length}
-            page={searchParams?.page}
-            filter={searchParams?.filter}
-          />
+      <AllAnswers
+        questionId={result._id}
+        userId={mongoUser._id}
+        totalAnswers={result.answers.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
+      />
 
-          <Answer
-            question={result.content}
-            questionId={JSON.stringify(result._id)}
-            authorId={JSON.stringify(mongoUser._id)}
-          />
-        </>
-      )}
-
-      {!mongoUser && <p>User not found or not authenticated</p>}
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoUser._id)}
+      />
     </>
   )
 }
