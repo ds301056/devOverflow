@@ -16,16 +16,23 @@ const page = async ({ params, searchParams }: any) => {
   // Get the user id from the Clerk session
   const { userId: clerkId } = auth()
 
-  let mongoUser
+  let mongoUser = null // Initialize with null
 
   if (clerkId) {
-    mongoUser = await getUserById({ userId: clerkId })
+    try {
+      mongoUser = await getUserById({ userId: clerkId })
+    } catch (error) {
+      console.error('Failed to fetch user:', error)
+    }
   }
 
-  // params comes from URL bar and searchParams comes from query params
   const result = await getQuestionById({ questionId: params.id })
 
-  // Wrap everything within a React fragment because there can only be one return element
+  // Add null checks for result and result.author
+  if (!result || !result.author) {
+    return <p>Question or author not found</p>
+  }
+
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -35,26 +42,30 @@ const page = async ({ params, searchParams }: any) => {
             className="flex items-center justify-start gap-1"
           >
             <Image
-              src={result.author.picture}
+              src={result.author.picture || '/default-profile.png'} // Fallback image
               className="rounded-full"
               width={22}
               height={22}
               alt="profile"
             />
             <p className="paragraph-semibold text-dark300_light700">
-              {result.author.name}
+              {result.author.name || 'Anonymous'}
             </p>
           </Link>
           <div className="flex justify-end">
             <Votes
               type="Question"
-              itemId={JSON.stringify(result._id)}
-              userId={JSON.stringify(mongoUser._id)}
+              itemId={result._id ? JSON.stringify(result._id) : ''} // Safe check for result._id
+              userId={mongoUser ? JSON.stringify(mongoUser._id) : ''} // Safe check for mongoUser
               upvotes={result.upvotes.length}
-              hasupVoted={result.upvotes.includes(mongoUser._id)}
+              hasupVoted={
+                mongoUser ? result.upvotes.includes(mongoUser._id) : false
+              } // Safe check for mongoUser
               downvotes={result.downvotes.length}
-              hasdownVoted={result.downvotes.includes(mongoUser._id)}
-              hasSaved={mongoUser?.saved.includes(result._id)}
+              hasdownVoted={
+                mongoUser ? result.downvotes.includes(mongoUser._id) : false
+              } // Safe check for mongoUser
+              hasSaved={mongoUser?.saved?.includes(result._id)} // Optional chaining to handle potential null values
             />
           </div>
         </div>
@@ -92,27 +103,35 @@ const page = async ({ params, searchParams }: any) => {
       <div className="mt-8 flex flex-wrap gap-2">
         {result.tags.map((tag: any) => (
           <RenderTag
-            key={tag._id}
-            _id={tag._id}
+            key={tag._id || tag.name} // Fallback key if tag._id is missing
+            _id={tag._id || 'unknown'} // Safe check for tag._id
             name={tag.name}
             showCount={false}
           />
         ))}
       </div>
 
-      <AllAnswers
-        questionId={result._id}
-        userId={mongoUser._id}
-        totalAnswers={result.answers.length}
-        page={searchParams?.page}
-        filter={searchParams?.filter}
-      />
+      {/* Ensure mongoUser is defined before accessing its properties */}
+      {mongoUser && (
+        <AllAnswers
+          questionId={result._id}
+          userId={mongoUser._id} // Safe access to mongoUser
+          totalAnswers={result.answers.length}
+          page={searchParams?.page}
+          filter={searchParams?.filter}
+        />
+      )}
 
-      <Answer
-        question={result.content}
-        questionId={JSON.stringify(result._id)}
-        authorId={JSON.stringify(mongoUser._id)}
-      />
+      {/* Only render Answer component if mongoUser is available */}
+      {mongoUser && (
+        <Answer
+          question={result.content}
+          questionId={JSON.stringify(result._id)}
+          authorId={JSON.stringify(mongoUser._id)} // Safe access
+        />
+      )}
+
+      {!mongoUser && <p>User not authenticated</p>}
     </>
   )
 }
