@@ -102,11 +102,11 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
       const tagValue = tagInput.value.trim() // Get the trimmed value of the input field.
 
       if (tagValue !== '') {
-        if (tagValue.length > 15) {
+        if (tagValue.length > 20) {
           // Set an error if the tag length exceeds 15 characters.
           return form.setError('tags', {
             type: 'required',
-            message: 'Tag must be less than 15 characters.',
+            message: 'Tag must be less than 20 characters.',
           })
         }
 
